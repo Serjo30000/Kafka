@@ -1,0 +1,18 @@
+server:
+  port: ${SERVER_PORT}
+spring:
+  datasource.username: ${DB_USER}
+  datasource.password: ${DB_PWD}
+  datasource.url: jdbc:postgresql://${DB_HOST}:5432/${DB_NAME}
+  datasource.driverClassName: org.postgresql.Driver
+  jpa.database-platform: org.hibernate.dialect.PostgreSQLDialect
+  jpa.hibernate.ddl-auto: update
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+kafka:
+  movie.topic: ${KAFKA_TOPIC_MOVIE}
+  filmcritic.topic: ${KAFKA_TOPIC_FILMCRITIC}
+  review.topic: ${KAFKA_TOPIC_REVIEW}
+  consumer.movie.id: ${KAFKA_CONSUMER_MOVIE_ID}
+  consumer.filmcritic.id: ${KAFKA_CONSUMER_FILMCRITIC_ID}
+  consumer.review.id: ${KAFKA_CONSUMER_REVIEW_ID}
