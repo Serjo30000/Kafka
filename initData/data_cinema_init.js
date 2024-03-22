@@ -93,13 +93,10 @@ const addReviewInMovie = async () => {
         }
     }
 }
+
 (async ()=>{
 	await addMovie();
 	await addFilmCritic();
 	await addReviewInMovie();
 
 })()
-
-
-//INSERT INTO review (date, estimation, comment, id_movie, id_film_critic) 
-//VALUES ('2024-03-23', 5, 'Comment1', 7, 8);

@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.text.DecimalFormat;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +42,8 @@ public class MovieService {
     }
 
     public List<MovieAndEstimationDto> getTop10MoviesAverageEstimation(){
+        DecimalFormat df = new DecimalFormat("#.#");
+        
         return movieRepository.findAll().stream()
                 .map(movie -> {
                     List<Review> reviews = movie.getReviews().stream().collect(Collectors.toList());
@@ -56,7 +59,7 @@ public class MovieService {
                     return MovieAndEstimationDto.builder()
                             .movieDto(movieDto)
                             .reviews(reviewDtos)
-                            .averageEstimation(averageEstimation)
+                            .averageEstimation(Double.parseDouble(df.format(averageEstimation)))
                             .build();
                 })
                 .sorted(Comparator.comparingDouble(MovieAndEstimationDto::getAverageEstimation).reversed())
