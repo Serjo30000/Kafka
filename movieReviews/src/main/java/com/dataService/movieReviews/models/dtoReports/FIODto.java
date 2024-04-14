@@ -1,4 +1,4 @@
-package com.dataService.movieReviews.models.util;
+package com.dataService.movieReviews.models.dtoReports;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;

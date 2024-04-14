@@ -5,13 +5,13 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import com.dataService.movieReviews.exceptions.FilmCriticNotFoundException;
+import com.dataService.movieReviews.models.dtoReports.FIODto;
+import com.dataService.movieReviews.models.dtoReports.FilmCriticAndMoviesDto;
 import com.dataService.movieReviews.models.filmCritics.FilmCritic;
 import com.dataService.movieReviews.models.filmCritics.MapperFilmCritic;
 import com.dataService.movieReviews.models.movies.MapperMovie;
 import com.dataService.movieReviews.models.movies.MovieDto;
 import com.dataService.movieReviews.models.reviews.Review;
-import com.dataService.movieReviews.models.util.FIODto;
-import com.dataService.movieReviews.models.util.FilmCriticAndMoviesDto;
 import com.dataService.movieReviews.repositories.FilmCriticRepository;
 import com.dataService.movieReviews.repositories.ReviewRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +43,20 @@ public class FilmCriticService {
 
     @Transactional
     public String saveFilmCritic(FilmCritic fc) {
+        if (fc.getFio().getName().isEmpty() || fc.getFio().getFamily().isEmpty()
+                || fc.getFio().getPatronymic().isEmpty() 
+                || fc.getLogin().isEmpty() || fc.getDateRegistration()==null){
+            return "FilmCritic not added";
+        }
+
+        for (FilmCritic elemFc : filmCriticRepository.findAll()){
+            if (fc.getLogin().equals(elemFc.getLogin())){
+                return "FilmCritic not added";
+            }
+        }
+
         filmCriticRepository.save(fc);
+
         return "FilmCritic added";
     }
 

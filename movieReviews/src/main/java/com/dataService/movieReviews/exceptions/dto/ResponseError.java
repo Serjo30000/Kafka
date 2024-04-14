@@ -1,4 +1,4 @@
-package com.dataService.movieReviews.exceptions.util;
+package com.dataService.movieReviews.exceptions.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

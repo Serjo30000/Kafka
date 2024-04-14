@@ -5,10 +5,11 @@ import java.util.HashSet;
 import java.util.ArrayList;
 import org.springframework.stereotype.Service;
 import java.util.List;
+
+import com.dataService.movieReviews.models.dtoReports.ReviewsAndDateDto;
 import com.dataService.movieReviews.models.reviews.MapperReview;
 import com.dataService.movieReviews.models.reviews.Review;
 import com.dataService.movieReviews.models.reviews.ReviewDto;
-import com.dataService.movieReviews.models.util.ReviewsAndDateDto;
 import com.dataService.movieReviews.repositories.FilmCriticRepository;
 import com.dataService.movieReviews.repositories.MovieRepository;
 import com.dataService.movieReviews.repositories.ReviewRepository;
@@ -32,8 +33,12 @@ public class ReviewService {
 
     @Transactional
     public String saveReview(Review review){
+        
         var fc = review.getFilmCritic();
         var m = review.getMovie();
+        if (fc==null || m==null){
+            return "Review not added";
+        }
         var fcFromDb = filmCriticRepository.findByLogin(fc.getLogin()).get();
         var mFromDb = movieRepository.findByTitle(m.getTitle()).get();
         review.setFilmCritic(fcFromDb);
@@ -47,8 +52,12 @@ public class ReviewService {
         reviewsM.add(review);
         mFromDb.setReviews(reviewsM);
 
+        if (review.getEstimation()<0 || review.getDate()==null || review.getComment().isEmpty()){
+            return "Review not added";
+        }
+
         reviewRepository.save(review);
-        return "Save review";
+        return "Review added";
     }
 
     public List<ReviewsAndDateDto> getAllReviewsByDate() {

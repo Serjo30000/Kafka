@@ -1,4 +1,4 @@
-package com.dataService.movieReviews.models.util;
+package com.dataService.movieReviews.models.dtoReports;
 
 import java.util.List;
 import com.dataService.movieReviews.models.filmCritics.FilmCriticDto;

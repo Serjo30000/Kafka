@@ -2,16 +2,15 @@ package com.dataService.movieReviews.controllers;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dataService.movieReviews.models.dtoReports.FIODto;
+import com.dataService.movieReviews.models.dtoReports.FilmCriticAndMoviesDto;
 import com.dataService.movieReviews.models.filmCritics.FilmCriticDto;
 import com.dataService.movieReviews.models.filmCritics.MapperFilmCritic;
-import com.dataService.movieReviews.models.util.FIODto;
-import com.dataService.movieReviews.models.util.FilmCriticAndMoviesDto;
 import com.dataService.movieReviews.services.FilmCriticService;
 
 import lombok.RequiredArgsConstructor;
@@ -24,26 +23,26 @@ public class FilmCriticController {
     private final MapperFilmCritic mapperFilmCritic;
 
     @GetMapping
-    public ResponseEntity<List<FilmCriticDto>> getAll(){
-        return ResponseEntity.ok(filmCriticService.getAll().stream()
-            .map(mapperFilmCritic::map)
-            .toList());
+    public List<FilmCriticDto> getAll(){
+        return filmCriticService.getAll().stream()
+                .map(mapperFilmCritic::map)
+                .toList();
     }
 
     @GetMapping("/{login}")
-    public ResponseEntity<FilmCriticDto> getByLogin(@PathVariable String login){
-        return ResponseEntity.ok(mapperFilmCritic.map(filmCriticService.getByLogin(login)));
+    public FilmCriticDto getByLogin(@PathVariable String login){
+        return mapperFilmCritic.map(filmCriticService.getByLogin(login));
     }
 
     @GetMapping("/getFio")
-    public ResponseEntity<List<FilmCriticDto>> getByFio(FIODto fDto){
-        return ResponseEntity.ok(filmCriticService.getByFio(fDto).stream()
+    public List<FilmCriticDto> getByFio(FIODto fDto){
+        return filmCriticService.getByFio(fDto).stream()
             .map(mapperFilmCritic::map)
-            .toList());
+            .toList();
     }
 
     @GetMapping("/getTop10MoviesCommentedFilmCritic")
-    public ResponseEntity<List<FilmCriticAndMoviesDto>> getTop10MoviesCommentedFilmCritic() {
-        return ResponseEntity.ok(filmCriticService.getTop10MoviesCommentedFilmCritic());
+    public List<FilmCriticAndMoviesDto> getTop10MoviesCommentedFilmCritic() {
+        return filmCriticService.getTop10MoviesCommentedFilmCritic();
     }
 }

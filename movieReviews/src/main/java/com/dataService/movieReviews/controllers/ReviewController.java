@@ -2,14 +2,13 @@ package com.dataService.movieReviews.controllers;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dataService.movieReviews.models.dtoReports.ReviewsAndDateDto;
 import com.dataService.movieReviews.models.reviews.MapperReview;
 import com.dataService.movieReviews.models.reviews.ReviewDto;
-import com.dataService.movieReviews.models.util.ReviewsAndDateDto;
 import com.dataService.movieReviews.services.ReviewService;
 
 import lombok.RequiredArgsConstructor;
@@ -22,14 +21,14 @@ public class ReviewController {
     private final MapperReview mapperReview;
 
     @GetMapping
-    public ResponseEntity<List<ReviewDto>> getAll(){
-        return ResponseEntity.ok(reviewService.getAll().stream()
+    public List<ReviewDto> getAll(){
+        return reviewService.getAll().stream()
             .map(mapperReview::map)
-            .toList());
+            .toList();
     }
 
     @GetMapping("/getAllReviewsByDate")
-    public ResponseEntity<List<ReviewsAndDateDto>> getAllReviewsByDate() {
-        return ResponseEntity.ok(reviewService.getAllReviewsByDate());
+    public List<ReviewsAndDateDto> getAllReviewsByDate() {
+        return reviewService.getAllReviewsByDate();
     }
 }

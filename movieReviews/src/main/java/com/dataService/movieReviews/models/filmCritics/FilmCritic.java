@@ -1,8 +1,9 @@
 package com.dataService.movieReviews.models.filmCritics;
 
 
+import com.dataService.movieReviews.models.dtoReports.FIODto;
 import com.dataService.movieReviews.models.reviews.Review;
-import com.dataService.movieReviews.models.util.FIODto;
+
 import java.util.Set;
 import java.time.LocalDate;
 import jakarta.persistence.AttributeOverride;

@@ -1,9 +1,10 @@
-package com.dataService.movieReviews.models.util;
+package com.dataService.movieReviews.models.dtoReports;
 
-
-import java.time.LocalDate;
-import com.dataService.movieReviews.models.reviews.ReviewDto;
 import java.util.List;
+
+import com.dataService.movieReviews.models.movies.MovieDto;
+import com.dataService.movieReviews.models.reviews.ReviewDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,8 @@ import lombok.NoArgsConstructor;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReviewsAndDateDto {
+public class MovieAndEstimationDto{
+    MovieDto movieDto;
     List<ReviewDto> reviews;
-    private LocalDate date;
+    double averageEstimation;
 }

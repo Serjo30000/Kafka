@@ -1,4 +1,4 @@
-package com.apiService.apiMovieReviews.util;
+package com.apiService.apiMovieReviews.dtos;
 
 import java.time.LocalDateTime;
 

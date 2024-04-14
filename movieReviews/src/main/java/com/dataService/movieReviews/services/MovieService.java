@@ -4,13 +4,14 @@ import com.dataService.movieReviews.exceptions.MovieNotFoundException;
 
 import java.util.Comparator;
 import org.springframework.stereotype.Service;
+
+import com.dataService.movieReviews.models.dtoReports.MovieAndEstimationDto;
 import com.dataService.movieReviews.models.movies.MapperMovie;
 import com.dataService.movieReviews.models.movies.Movie;
 import com.dataService.movieReviews.models.movies.MovieDto;
 import com.dataService.movieReviews.models.reviews.MapperReview;
 import com.dataService.movieReviews.models.reviews.Review;
 import com.dataService.movieReviews.models.reviews.ReviewDto;
-import com.dataService.movieReviews.models.util.MovieAndEstimationDto;
 import com.dataService.movieReviews.repositories.MovieRepository;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +38,20 @@ public class MovieService {
 
     @Transactional
     public String saveMovie(Movie m) {
+        if (m.getTitle().isEmpty() || m.getCountry().isEmpty() 
+            || m.getRating()<0 || m.getGenre().isEmpty() 
+            || m.getDuration()<0 || m.getCreateDate()==null){
+            return "Movie not added";
+        }
+
+        for (Movie elemM : movieRepository.findAll()){
+            if (m.getTitle().equals(elemM.getTitle())){
+                return "Movie not added";
+            }
+        }
+
         movieRepository.save(m);
+
         return "Movie added";
     }
 

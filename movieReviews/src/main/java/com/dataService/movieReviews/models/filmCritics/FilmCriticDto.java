@@ -1,6 +1,6 @@
 package com.dataService.movieReviews.models.filmCritics;
 
-import com.dataService.movieReviews.models.util.FIODto;
+import com.dataService.movieReviews.models.dtoReports.FIODto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDate;
