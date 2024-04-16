@@ -21,8 +21,8 @@ public class RestTemplateClient {
     }
 
     public <T> List<T> requestLst(String url, Class<T[]> type, Object... uriVariables) {
-        T[] responseArray = template.getForObject(url, type, uriVariables);
         try {
+            T[] responseArray = template.getForObject(url, type, uriVariables);
             if (responseArray != null) {
                 return List.of(responseArray);
             } else {

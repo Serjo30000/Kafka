@@ -25,8 +25,8 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin(originPatterns = "*",
     methods = {RequestMethod.GET,RequestMethod.POST})
 public class ApiServiceReviewController {
-    private final KafkaMessageSender publisher;
-    private final RestTemplateClient getterRequest;
+    private final KafkaMessageSender kafkaMessageSender;
+    private final RestTemplateClient restTemplateClient;
     
     @Value("${data-service.base-url}")
     private String baseUrl;
@@ -35,17 +35,17 @@ public class ApiServiceReviewController {
 
     @PostMapping("/addReviewInMovie")
     public MessageRes addReview(@RequestBody ReviewDto dto){
-        return publisher.send(topic,dto.getTitle(),dto);
+        return kafkaMessageSender.send(topic,dto.getTitle(),dto);
     }
 
     @GetMapping
     public List<ReviewDto> getAll(){
-        return getterRequest.requestLst(baseUrl+"/reviews", ReviewDto[].class);
+        return restTemplateClient.requestLst(baseUrl+"/reviews", ReviewDto[].class);
     }
 
     @GetMapping("/getAllReviewsByDate")
     public List<ReviewsAndDateDto> getAllReviewsByDate() {
         var path = "/reviews/getAllReviewsByDate";
-        return getterRequest.requestLst(baseUrl + path, ReviewsAndDateDto[].class);
+        return restTemplateClient.requestLst(baseUrl + path, ReviewsAndDateDto[].class);
     }
 }

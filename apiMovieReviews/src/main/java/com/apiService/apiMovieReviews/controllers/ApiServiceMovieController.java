@@ -22,8 +22,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/movies")
 @RequiredArgsConstructor
 public class ApiServiceMovieController {
-    private final KafkaMessageSender publisher;
-    private final RestTemplateClient getterRequest;
+    private final KafkaMessageSender kafkaMessageSender;
+    private final RestTemplateClient restTemplateClient;
     
     @Value("${data-service.base-url}")
     private String baseUrl;
@@ -32,24 +32,24 @@ public class ApiServiceMovieController {
 
     @PostMapping("/addMovie")
     public MessageRes addMovie(@RequestBody MovieDto dto){
-        return publisher.send(topic,dto.getTitle() ,dto);       
+        return kafkaMessageSender.send(topic,dto.getTitle() ,dto);       
     }
 
     @GetMapping
     public List<MovieDto> getAll(){
-        return getterRequest.requestLst(baseUrl+"/movies", MovieDto[].class);
+        return restTemplateClient.requestLst(baseUrl+"/movies", MovieDto[].class);
     }
 
     @GetMapping("/{title}")
     public MovieDto getByTitle(@PathVariable("title")String title){
         var path ="/movies/{title}";
-        return getterRequest.request(baseUrl+path, MovieDto.class, title);
+        return restTemplateClient.request(baseUrl+path, MovieDto.class, title);
     }
 
     @GetMapping("/getTop10MoviesAverageEstimation")
     public List<MovieAndEstimationDto> getTop10MoviesAverageEstimation() {
 
         var path = "/movies/getTop10MoviesAverageEstimation";
-        return getterRequest.requestLst(baseUrl + path, MovieAndEstimationDto[].class);
+        return restTemplateClient.requestLst(baseUrl + path, MovieAndEstimationDto[].class);
     }
 }

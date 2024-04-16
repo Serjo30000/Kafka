@@ -23,8 +23,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/filmCritics")
 @RequiredArgsConstructor
 public class ApiServiceFilmCriticController {
-    private final KafkaMessageSender publisher;
-    private final RestTemplateClient getterRequest;
+    private final KafkaMessageSender kafkaMessageSender;
+    private final RestTemplateClient restTemplateClient;
     
     @Value("${data-service.base-url}")
     private String baseUrl;
@@ -34,20 +34,20 @@ public class ApiServiceFilmCriticController {
     @PostMapping("/addFilmCritic")
     public MessageRes addFilmCritic(@RequestBody FilmCriticDto dto){
         
-        return publisher.send(topic,dto.getLogin(),dto);
+        return kafkaMessageSender.send(topic,dto.getLogin(),dto);
     }
 
     @GetMapping
     public List<FilmCriticDto> getAll(){
         
-        return getterRequest.requestLst(baseUrl+"/filmCritics", FilmCriticDto[].class);
+        return restTemplateClient.requestLst(baseUrl+"/filmCritics", FilmCriticDto[].class);
 
     }
 
     @GetMapping("/{login}")
     public FilmCriticDto getById(@PathVariable("login")String login){
         var path ="/filmCritics/{login}";
-        return getterRequest.request(baseUrl+path, FilmCriticDto.class, login);
+        return restTemplateClient.request(baseUrl+path, FilmCriticDto.class, login);
     }
 
     @GetMapping("/getFio")
@@ -57,12 +57,12 @@ public class ApiServiceFilmCriticController {
             .append("name=").append(fDto.getName())
             .append("&family=").append(fDto.getFamily())
             .append("&patronymic=").append(fDto.getPatronymic());       
-        return getterRequest.requestLst(builder.toString(), FilmCriticDto[].class);
+        return restTemplateClient.requestLst(builder.toString(), FilmCriticDto[].class);
     }
 
     @GetMapping("/getTop10MoviesCommentedFilmCritic")
     public List<FilmCriticAndMoviesDto> getTop10MoviesCommentedFilmCritic() {
         var path = "/filmCritics/getTop10MoviesCommentedFilmCritic";
-        return getterRequest.requestLst(baseUrl + path, FilmCriticAndMoviesDto[].class);
+        return restTemplateClient.requestLst(baseUrl + path, FilmCriticAndMoviesDto[].class);
     }
 }
