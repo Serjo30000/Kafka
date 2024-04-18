@@ -2,6 +2,7 @@ package com.dataService.movieReviews.controllers;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,14 +22,14 @@ public class ReviewController {
     private final MapperReview mapperReview;
 
     @GetMapping
-    public List<ReviewDto> getAll(){
-        return reviewService.getAll().stream()
+    public ResponseEntity<List<ReviewDto>> getAll(){
+        return ResponseEntity.ok(reviewService.getAll().stream()
             .map(mapperReview::map)
-            .toList();
+            .toList());
     }
 
     @GetMapping("/getAllReviewsByDate")
-    public List<ReviewsAndDateDto> getAllReviewsByDate() {
-        return reviewService.getAllReviewsByDate();
+    public ResponseEntity<List<ReviewsAndDateDto>> getAllReviewsByDate() {
+        return ResponseEntity.ok(reviewService.getAllReviewsByDate());
     }
 }

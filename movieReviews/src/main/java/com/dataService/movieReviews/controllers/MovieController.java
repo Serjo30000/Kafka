@@ -2,6 +2,7 @@ package com.dataService.movieReviews.controllers;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,19 +23,19 @@ public class MovieController {
     private final MapperMovie mapperMovie;
 
     @GetMapping
-    public List<MovieDto> getAll(){
-        return movieService.getAll().stream()
+    public ResponseEntity<List<MovieDto>> getAll(){
+        return ResponseEntity.ok(movieService.getAll().stream()
             .map(mapperMovie::map)
-            .toList();
+            .toList());
     }
 
     @GetMapping("/{title}")
-    public MovieDto getByTitle(@PathVariable("title")String title){
-        return mapperMovie.map(movieService.getByTitle(title));
+    public ResponseEntity<MovieDto> getByTitle(@PathVariable("title")String title){
+        return ResponseEntity.ok(mapperMovie.map(movieService.getByTitle(title)));
     }
 
     @GetMapping("/getTop10MoviesAverageEstimation")
-    public List<MovieAndEstimationDto> getTop10MoviesAverageEstimation() {
-        return movieService.getTop10MoviesAverageEstimation();
+    public ResponseEntity<List<MovieAndEstimationDto>> getTop10MoviesAverageEstimation() {
+        return ResponseEntity.ok(movieService.getTop10MoviesAverageEstimation());
     }
 }

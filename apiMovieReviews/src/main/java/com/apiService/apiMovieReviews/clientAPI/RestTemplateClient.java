@@ -1,4 +1,4 @@
-package com.apiService.apiMovieReviews.wrappers;
+package com.apiService.apiMovieReviews.clientAPI;
 
 import java.util.List;
 import org.springframework.stereotype.Component;
