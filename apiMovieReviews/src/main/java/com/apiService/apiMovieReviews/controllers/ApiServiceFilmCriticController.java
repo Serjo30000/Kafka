@@ -38,7 +38,7 @@ public class ApiServiceFilmCriticController {
     @PostMapping("/addFilmCritic")
     public ResponseEntity<MessageRes> addFilmCritic(@RequestBody FilmCriticDto dto){
         try {
-            kafkaMessagePublisher.sendToFilmCriticTopic(dto.getLogin(), dto);
+            kafkaMessagePublisher.sendToFilmCriticTopic(dto.getFilmCriticUUID(), dto);
             return ResponseEntity.ok(new MessageRes("Added data successfully"));
         } 
         catch (InterruptedException | ExecutionException e) {
@@ -57,10 +57,10 @@ public class ApiServiceFilmCriticController {
             @ApiResponse(responseCode = "404", content = @Content(schema = @Schema())),
             @ApiResponse(responseCode = "200")
     })
-    @GetMapping("/{login}")
-    public ResponseEntity<FilmCriticDto> getById(@PathVariable("login")String login){
-        var path ="/filmCritics/{login}";
-        return ResponseEntity.ok(restTemplateClient.request(baseUrl+path, FilmCriticDto.class, login));
+    @GetMapping("/{filmCriticUUID}")
+    public ResponseEntity<FilmCriticDto> getByFilmCriticUUID(@PathVariable("filmCriticUUID")String filmCriticUUID){
+        var path ="/filmCritics/{filmCriticUUID}";
+        return ResponseEntity.ok(restTemplateClient.request(baseUrl+path, FilmCriticDto.class, filmCriticUUID));
     }
 
     @GetMapping("/getFio")

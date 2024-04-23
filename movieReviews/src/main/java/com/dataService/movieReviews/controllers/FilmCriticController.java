@@ -30,9 +30,9 @@ public class FilmCriticController {
                 .toList());
     }
 
-    @GetMapping("/{login}")
-    public ResponseEntity<FilmCriticDto> getByLogin(@PathVariable String login){
-        return ResponseEntity.ok(mapperFilmCritic.map(filmCriticService.getByLogin(login)));
+    @GetMapping("/{filmCriticUUID}")
+    public ResponseEntity<FilmCriticDto> getByFilmCriticUUID(@PathVariable String filmCriticUUID){
+        return ResponseEntity.ok(mapperFilmCritic.map(filmCriticService.getByFilmCriticUUID(filmCriticUUID)));
     }
 
     @GetMapping("/getFio")

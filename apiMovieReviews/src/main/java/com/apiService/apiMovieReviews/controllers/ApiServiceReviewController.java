@@ -37,7 +37,7 @@ public class ApiServiceReviewController {
     @PostMapping("/addReviewInMovie")
     public ResponseEntity<MessageRes> addReview(@RequestBody ReviewDto dto){
         try {
-            kafkaMessagePublisher.sendToReviewTopic(dto.getTitle(), dto);
+            kafkaMessagePublisher.sendToReviewTopic(dto.getMovieUUID(), dto);
             return ResponseEntity.ok(new MessageRes("Added data successfully"));
         } 
         catch (InterruptedException | ExecutionException e) {

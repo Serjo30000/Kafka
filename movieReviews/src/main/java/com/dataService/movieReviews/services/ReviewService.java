@@ -39,8 +39,8 @@ public class ReviewService {
         if (fc==null || m==null){
             return "Review not added";
         }
-        var fcFromDb = filmCriticRepository.findByLogin(fc.getLogin()).get();
-        var mFromDb = movieRepository.findByTitle(m.getTitle()).get();
+        var fcFromDb = filmCriticRepository.findByFilmCriticUUID(fc.getFilmCriticUUID()).get();
+        var mFromDb = movieRepository.findByMovieUUID(m.getMovieUUID()).get();
         review.setFilmCritic(fcFromDb);
         review.setMovie(mFromDb);
         var reviewsFc = Optional.ofNullable(fcFromDb.getReviews())

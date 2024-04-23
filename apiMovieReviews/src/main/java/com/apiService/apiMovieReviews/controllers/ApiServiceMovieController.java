@@ -37,7 +37,7 @@ public class ApiServiceMovieController {
     @PostMapping("/addMovie")
     public ResponseEntity<MessageRes> addMovie(@RequestBody MovieDto dto){
         try {
-            kafkaMessagePublisher.sendToMovieTopic(dto.getTitle(), dto);
+            kafkaMessagePublisher.sendToMovieTopic(dto.getMovieUUID(), dto);
             return ResponseEntity.ok(new MessageRes("Added data successfully"));
         } 
         catch (InterruptedException | ExecutionException e) {
@@ -54,10 +54,10 @@ public class ApiServiceMovieController {
             @ApiResponse(responseCode = "404", content = @Content(schema = @Schema())),
             @ApiResponse(responseCode = "200")
     })
-    @GetMapping("/{title}")
-    public ResponseEntity<MovieDto> getByTitle(@PathVariable("title")String title){
-        var path ="/movies/{title}";
-        return ResponseEntity.ok(restTemplateClient.request(baseUrl+path, MovieDto.class, title));
+    @GetMapping("/{movieUUID}")
+    public ResponseEntity<MovieDto> getByMovieUUID(@PathVariable("movieUUID")String movieUUID){
+        var path ="/movies/{movieUUID}";
+        return ResponseEntity.ok(restTemplateClient.request(baseUrl+path, MovieDto.class, movieUUID));
     }
 
     @GetMapping("/getTop10MoviesAverageEstimation")

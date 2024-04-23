@@ -18,6 +18,6 @@ public class ReviewDto {
     private LocalDate date;
     private Integer estimation;
     private String comment;
-    private String title;
-    private String login;
+    private String movieUUID;
+    private String filmCriticUUID;
 }

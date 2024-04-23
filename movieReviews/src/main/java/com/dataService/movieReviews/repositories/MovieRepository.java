@@ -7,6 +7,6 @@ import com.dataService.movieReviews.models.movies.Movie;
 
 @Repository
 public interface MovieRepository extends JpaRepository<Movie,Integer> {
-    Optional<Movie> findByTitle(String title);
-    boolean existsByTitle(String title);
+    Optional<Movie> findByMovieUUID(String movieUUID);
+    boolean existsByMovieUUID(String movieUUID);
 }

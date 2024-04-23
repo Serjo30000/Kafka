@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 public class MapperMovie {
     public Movie map(MovieDto dto) {
         return Movie.builder()
+                .movieUUID(dto.getMovieUUID())
                 .title(dto.getTitle())
                 .createDate(dto.getCreateDate())
                 .country(dto.getCountry())
@@ -17,6 +18,7 @@ public class MapperMovie {
 
     public MovieDto map(Movie dto) {
         return MovieDto.builder()
+                .movieUUID(dto.getMovieUUID())
                 .title(dto.getTitle())
                 .createDate(dto.getCreateDate())
                 .country(dto.getCountry())

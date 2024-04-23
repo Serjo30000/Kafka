@@ -10,9 +10,6 @@ const FAMILIES = ["Petrov", "Ivanov", "Semyonov", "Egorov", "Smirnov"];
 const NAMES = ["Sergey", "Ivan", "Vasiliy", "Igor", "Dmitriy"];
 const PATRONUMIC = ["Petrovich", "Alexsandrovich", "Dmitrievich", "Andreevich", "Ivanovich"];
 
-let titles_arr = [];
-let logins_arr = [];
-
 const getRandomInt = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -25,7 +22,6 @@ const addMovie = async () => {
     for (let i = 0; i < 20; i++) {
         const index = getRandomInt(0, 4);
         const title = "Movie" + i;
-        titles_arr.push(title);
         const createDate = new Date(Date.now() + getRandomDate());
         const rating = RATING[getRandomInt(0, 5)];
         const duration = getRandomInt(60, 180);
@@ -55,7 +51,6 @@ const addFilmCritic = async () => {
             "name": NAMES[index],
             "patronymic": PATRONUMIC[index]
         };
-        logins_arr.push(login);
         const dateRegistration = new Date(Date.now() + getRandomDate());
         const dto = {
             "login": login,
@@ -73,8 +68,24 @@ const addFilmCritic = async () => {
 
 const addReviewInMovie = async () => {
     for (let i = 0; i < 100; i++) {
-        const titles = titles_arr[getRandomInt(0, titles_arr.length - 1)];
-        const logins = logins_arr[getRandomInt(0, logins_arr.length - 1)];
+        let movies_arr = []
+        await axios.get(BASE_URL + "movies", { headers: HEADERS })
+            .then(response => {
+                movies_arr = response.data;
+            })
+            .catch(error => {
+                console.error('Ошибка при получении списка фильмов:', error);
+            });
+        let film_critics_arr = []
+        await axios.get(BASE_URL + "filmCritics", { headers: HEADERS })
+            .then(response => {
+                film_critics_arr = response.data;
+            })
+            .catch(error => {
+                console.error('Ошибка при получении списка фильмов:', error);
+            });
+        const movies = movies_arr[getRandomInt(0, movies_arr.length - 1)].movieUUID;
+        const filmCritics = film_critics_arr[getRandomInt(0, film_critics_arr.length - 1)].filmCriticUUID;
         const date = new Date(Date.now() + getRandomDate());
         const estimation = getRandomInt(0,5);
         const comment = "Comment" + i;
@@ -82,8 +93,8 @@ const addReviewInMovie = async () => {
             "date": date.toISOString().split('T')[0],
             "estimation": estimation,
             "comment": comment,
-            "title": titles,
-            "login": logins
+            "movieUUID": movies,
+            "filmCriticUUID": filmCritics
         };
         try {
             const response = await axios.post(BASE_URL + "reviews/addReviewInMovie", dto, { headers: HEADERS });
