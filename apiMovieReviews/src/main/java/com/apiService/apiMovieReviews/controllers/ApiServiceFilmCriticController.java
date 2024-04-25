@@ -39,7 +39,7 @@ public class ApiServiceFilmCriticController {
     public ResponseEntity<MessageRes> addFilmCritic(@RequestBody FilmCriticDto dto){
         try {
             kafkaMessagePublisher.sendToFilmCriticTopic(dto.getFilmCriticUUID(), dto);
-            return ResponseEntity.ok(new MessageRes("Added data successfully"));
+            return ResponseEntity.ok(new MessageRes("Accepted"));
         } 
         catch (InterruptedException | ExecutionException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageRes("Internal server error"));

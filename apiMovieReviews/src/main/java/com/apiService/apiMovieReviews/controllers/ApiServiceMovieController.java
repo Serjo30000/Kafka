@@ -38,7 +38,7 @@ public class ApiServiceMovieController {
     public ResponseEntity<MessageRes> addMovie(@RequestBody MovieDto dto){
         try {
             kafkaMessagePublisher.sendToMovieTopic(dto.getMovieUUID(), dto);
-            return ResponseEntity.ok(new MessageRes("Added data successfully"));
+            return ResponseEntity.ok(new MessageRes("Accepted"));
         } 
         catch (InterruptedException | ExecutionException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageRes("Internal server error"));
