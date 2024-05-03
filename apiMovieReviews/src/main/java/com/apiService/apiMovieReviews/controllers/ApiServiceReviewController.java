@@ -1,6 +1,7 @@
 package com.apiService.apiMovieReviews.controllers;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -34,10 +35,11 @@ public class ApiServiceReviewController {
     @Value("${data-service.base-url}")
     private String baseUrl;
 
-    @PostMapping("/addReviewInMovie")
+    @PostMapping("/addReview")
     public ResponseEntity<MessageRes> addReview(@RequestBody ReviewDto dto){
         try {
-            kafkaMessagePublisher.sendToReviewTopic(dto.getMovieUUID(), dto);
+            UUID uuid = UUID.randomUUID();
+            kafkaMessagePublisher.sendToReviewTopic(uuid.toString(), dto);
             return ResponseEntity.ok(new MessageRes("Accepted"));
         } 
         catch (InterruptedException | ExecutionException e) {

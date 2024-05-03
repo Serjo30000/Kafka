@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder(toBuilder = true)
 public class FilmCriticDto {
-    private String filmCriticUUID;
     private String login;
     private FIODto fio;
     @JsonFormat(pattern = "yyyy-MM-dd")

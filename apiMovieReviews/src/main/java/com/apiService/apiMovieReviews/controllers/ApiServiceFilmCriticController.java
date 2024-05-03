@@ -1,6 +1,7 @@
 package com.apiService.apiMovieReviews.controllers;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -38,7 +39,8 @@ public class ApiServiceFilmCriticController {
     @PostMapping("/addFilmCritic")
     public ResponseEntity<MessageRes> addFilmCritic(@RequestBody FilmCriticDto dto){
         try {
-            kafkaMessagePublisher.sendToFilmCriticTopic(dto.getFilmCriticUUID(), dto);
+            UUID uuid = UUID.randomUUID();
+            kafkaMessagePublisher.sendToFilmCriticTopic(uuid.toString(), dto);
             return ResponseEntity.ok(new MessageRes("Accepted"));
         } 
         catch (InterruptedException | ExecutionException e) {
@@ -57,10 +59,10 @@ public class ApiServiceFilmCriticController {
             @ApiResponse(responseCode = "404", content = @Content(schema = @Schema())),
             @ApiResponse(responseCode = "200")
     })
-    @GetMapping("/{filmCriticUUID}")
-    public ResponseEntity<FilmCriticDto> getByFilmCriticUUID(@PathVariable("filmCriticUUID")String filmCriticUUID){
-        var path ="/filmCritics/{filmCriticUUID}";
-        return ResponseEntity.ok(restTemplateClient.request(baseUrl+path, FilmCriticDto.class, filmCriticUUID));
+    @GetMapping("/{login}")
+    public ResponseEntity<FilmCriticDto> getByLogin(@PathVariable("login")String login){
+        var path ="/filmCritics/{login}";
+        return ResponseEntity.ok(restTemplateClient.request(baseUrl+path, FilmCriticDto.class, login));
     }
 
     @GetMapping("/getFio")

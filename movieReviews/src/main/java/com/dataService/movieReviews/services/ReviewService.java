@@ -33,14 +33,13 @@ public class ReviewService {
 
     @Transactional
     public String saveReview(Review review){
-        
         var fc = review.getFilmCritic();
         var m = review.getMovie();
         if (fc==null || m==null){
             return "Review not added";
         }
-        var fcFromDb = filmCriticRepository.findByFilmCriticUUID(fc.getFilmCriticUUID()).get();
-        var mFromDb = movieRepository.findByMovieUUID(m.getMovieUUID()).get();
+        var fcFromDb = filmCriticRepository.findByLogin(fc.getLogin()).get();
+        var mFromDb = movieRepository.findByImdb(m.getImdb()).get();
         review.setFilmCritic(fcFromDb);
         review.setMovie(mFromDb);
         var reviewsFc = Optional.ofNullable(fcFromDb.getReviews())

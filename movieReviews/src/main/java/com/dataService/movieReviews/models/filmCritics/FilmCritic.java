@@ -34,7 +34,6 @@ public class FilmCritic {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(unique = true)
-    private String filmCriticUUID;
     private String login;
     @Embedded
     @AttributeOverrides({
@@ -51,7 +50,6 @@ public class FilmCritic {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((filmCriticUUID == null) ? 0 : filmCriticUUID.hashCode());
         result = prime * result + ((login == null) ? 0 : login.hashCode());
         result = prime * result + ((fio == null) ? 0 : fio.hashCode());
         result = prime * result + ((dateRegistration == null) ? 0 : dateRegistration.hashCode());
@@ -70,11 +68,6 @@ public class FilmCritic {
             if (other.id != null)
                 return false;
         } else if (!id.equals(other.id))
-            return false;
-        if (filmCriticUUID == null) {
-            if (other.filmCriticUUID != null)
-                return false;
-        } else if (!filmCriticUUID.equals(other.filmCriticUUID))
             return false;
         if (login == null) {
             if (other.login != null)

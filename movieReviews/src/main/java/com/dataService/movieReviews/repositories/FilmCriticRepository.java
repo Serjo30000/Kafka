@@ -11,6 +11,6 @@ import com.dataService.movieReviews.models.filmCritics.FilmCritic;
 @Repository
 public interface FilmCriticRepository extends JpaRepository<FilmCritic, Integer>{
     List<FilmCritic> findByFio(FIODto fio);
-    Optional<FilmCritic> findByFilmCriticUUID(String filmCriticUUID);
-    boolean existsByFilmCriticUUID(String filmCriticUUID);
+    Optional<FilmCritic> findByLogin(String login);
+    boolean existsByLogin(String login);
 }

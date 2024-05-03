@@ -14,16 +14,16 @@ public class MapperReview {
         review.setEstimation(dto.getEstimation());
         review.setComment(dto.getComment());
         review.setMovie(Movie.builder()
-                .movieUUID(dto.getMovieUUID()).build());
+                .imdb(dto.getImdb()).build());
         review.setFilmCritic(FilmCritic.builder()
-                .filmCriticUUID(dto.getFilmCriticUUID()).build());
+                .login(dto.getLogin()).build());
         return review;
     }
 
     public ReviewDto map(Review dto) {
         return ReviewDto.builder()
-                .movieUUID(dto.getMovie().getMovieUUID())
-                .filmCriticUUID(dto.getFilmCritic().getFilmCriticUUID())
+                .imdb(dto.getMovie().getImdb())
+                .login(dto.getFilmCritic().getLogin())
                 .estimation(dto.getEstimation())
                 .comment(dto.getComment())
                 .date(dto.getDate())

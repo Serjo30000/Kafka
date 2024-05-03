@@ -28,7 +28,7 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(unique = true)
-    private String movieUUID;
+    private String imdb;
     private String title;
     private LocalDate createDate;
     private String country;
@@ -42,7 +42,7 @@ public class Movie {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((movieUUID == null) ? 0 : movieUUID.hashCode());
+        result = prime * result + ((imdb == null) ? 0 : imdb.hashCode());
         result = prime * result + ((title == null) ? 0 : title.hashCode());
         result = prime * result + ((createDate == null) ? 0 : createDate.hashCode());
         result = prime * result + ((country == null) ? 0 : country.hashCode());
@@ -65,10 +65,10 @@ public class Movie {
                 return false;
         } else if (!id.equals(other.id))
             return false;
-        if (movieUUID == null) {
-            if (other.movieUUID != null)
+        if (imdb == null) {
+            if (other.imdb != null)
                 return false;
-        } else if (!movieUUID.equals(other.movieUUID))
+        } else if (!imdb.equals(other.imdb))
             return false;
         if (title == null) {
             if (other.title != null)

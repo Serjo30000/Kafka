@@ -10,6 +10,9 @@ const FAMILIES = ["Petrov", "Ivanov", "Semyonov", "Egorov", "Smirnov"];
 const NAMES = ["Sergey", "Ivan", "Vasiliy", "Igor", "Dmitriy"];
 const PATRONUMIC = ["Petrovich", "Alexsandrovich", "Dmitrievich", "Andreevich", "Ivanovich"];
 
+let imdbs_arr = [];
+let logins_arr = [];
+
 const getRandomInt = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -18,14 +21,35 @@ const getRandomDate = () => {
     return Math.random() * 5 * 24 * 60 * 60 * 1000;
 }
 
+let usedIds = new Set();
+
+function generateIMDbId() {
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let imdbIdLength = 7;
+    let imdbId = 'tt';
+
+    do {
+        imdbId = 'tt';
+        for (let i = 0; i < imdbIdLength; i++) {
+            imdbId += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+    } while (usedIds.has(imdbId));
+
+    usedIds.add(imdbId);
+    return imdbId;
+}
+
 const addMovie = async () => {
     for (let i = 0; i < 20; i++) {
         const index = getRandomInt(0, 4);
+        const imdb = generateIMDbId()
+        imdbs_arr.push(imdb);
         const title = "Movie" + i;
         const createDate = new Date(Date.now() + getRandomDate());
         const rating = RATING[getRandomInt(0, 5)];
         const duration = getRandomInt(60, 180);
         const dto = {
+            "imdb": imdb,
             "title": title,
             "createDate": createDate.toISOString().split('T')[0],
             "country": COUNTRY[index],
@@ -46,6 +70,7 @@ const addFilmCritic = async () => {
     for (let i = 0; i < 20; i++) {
         const index = getRandomInt(0, 4);
         const login = "Login" + i;
+        logins_arr.push(login);
         const fio = {
             "family": FAMILIES[index],
             "name": NAMES[index],
@@ -66,26 +91,10 @@ const addFilmCritic = async () => {
     }
 }
 
-const addReviewInMovie = async () => {
+const addReview = async () => {
     for (let i = 0; i < 100; i++) {
-        let movies_arr = []
-        await axios.get(BASE_URL + "movies", { headers: HEADERS })
-            .then(response => {
-                movies_arr = response.data;
-            })
-            .catch(error => {
-                console.error('Ошибка при получении списка фильмов:', error);
-            });
-        let film_critics_arr = []
-        await axios.get(BASE_URL + "filmCritics", { headers: HEADERS })
-            .then(response => {
-                film_critics_arr = response.data;
-            })
-            .catch(error => {
-                console.error('Ошибка при получении списка фильмов:', error);
-            });
-        const movies = movies_arr[getRandomInt(0, movies_arr.length - 1)].movieUUID;
-        const filmCritics = film_critics_arr[getRandomInt(0, film_critics_arr.length - 1)].filmCriticUUID;
+        const imdbs = imdbs_arr[getRandomInt(0, imdbs_arr.length - 1)];
+        const logins = logins_arr[getRandomInt(0, logins_arr.length - 1)];
         const date = new Date(Date.now() + getRandomDate());
         const estimation = getRandomInt(0,5);
         const comment = "Comment" + i;
@@ -93,11 +102,11 @@ const addReviewInMovie = async () => {
             "date": date.toISOString().split('T')[0],
             "estimation": estimation,
             "comment": comment,
-            "movieUUID": movies,
-            "filmCriticUUID": filmCritics
+            "imdb": imdbs,
+            "login": logins
         };
         try {
-            const response = await axios.post(BASE_URL + "reviews/addReviewInMovie", dto, { headers: HEADERS });
+            const response = await axios.post(BASE_URL + "reviews/addReview", dto, { headers: HEADERS });
             console.log(response.data);
         } catch (error) {
             console.error(error);
@@ -108,6 +117,6 @@ const addReviewInMovie = async () => {
 (async ()=>{
 	await addMovie();
 	await addFilmCritic();
-	await addReviewInMovie();
+	await addReview();
 
 })()

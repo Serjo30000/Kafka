@@ -17,7 +17,6 @@ import com.dataService.movieReviews.repositories.MovieRepository;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.text.DecimalFormat;
 
@@ -32,22 +31,24 @@ public class MovieService {
         return movieRepository.findAll();
     }
 
-    public Movie getByMovieUUID(String movieUUID) {
-        return movieRepository.findByMovieUUID(
-                movieUUID)
-                .orElseThrow(() -> new MovieNotFoundException("Movie not found with movieUUID=" + movieUUID));
+    public Movie getByImdb(String imdb) {
+        return movieRepository.findByImdb(
+                imdb)
+                .orElseThrow(() -> new MovieNotFoundException("Movie not found with imdb=" + imdb));
     }
 
     @Transactional
     public String saveMovie(Movie m) {
-        UUID uuid = UUID.randomUUID();
-
-        m.setMovieUUID(uuid.toString());
-
-        if (m.getTitle().isEmpty() || m.getCountry().isEmpty() 
+        if (m.getImdb().isEmpty() || m.getTitle().isEmpty() || m.getCountry().isEmpty() 
             || m.getRating()<0 || m.getGenre().isEmpty() 
             || m.getDuration()<0 || m.getCreateDate()==null){
             return "Movie not added";
+        }
+
+        for (Movie elemM : movieRepository.findAll()) {
+            if (m.getImdb().equals(elemM.getImdb())) {
+                return "Movie not added";
+            }
         }
 
         movieRepository.save(m);

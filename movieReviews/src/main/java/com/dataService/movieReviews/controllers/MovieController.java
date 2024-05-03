@@ -29,9 +29,9 @@ public class MovieController {
             .toList());
     }
 
-    @GetMapping("/{movieUUID}")
-    public ResponseEntity<MovieDto> getByMovieUUID(@PathVariable("movieUUID")String movieUUID){
-        return ResponseEntity.ok(mapperMovie.map(movieService.getByMovieUUID(movieUUID)));
+    @GetMapping("/{imdb}")
+    public ResponseEntity<MovieDto> getByImdb(@PathVariable("imdb")String imdb){
+        return ResponseEntity.ok(mapperMovie.map(movieService.getByImdb(imdb)));
     }
 
     @GetMapping("/getTop10MoviesAverageEstimation")

@@ -1,6 +1,7 @@
 package com.apiService.apiMovieReviews.controllers;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -37,7 +38,8 @@ public class ApiServiceMovieController {
     @PostMapping("/addMovie")
     public ResponseEntity<MessageRes> addMovie(@RequestBody MovieDto dto){
         try {
-            kafkaMessagePublisher.sendToMovieTopic(dto.getMovieUUID(), dto);
+            UUID uuid = UUID.randomUUID();
+            kafkaMessagePublisher.sendToMovieTopic(uuid.toString(), dto);
             return ResponseEntity.ok(new MessageRes("Accepted"));
         } 
         catch (InterruptedException | ExecutionException e) {
@@ -54,10 +56,10 @@ public class ApiServiceMovieController {
             @ApiResponse(responseCode = "404", content = @Content(schema = @Schema())),
             @ApiResponse(responseCode = "200")
     })
-    @GetMapping("/{movieUUID}")
-    public ResponseEntity<MovieDto> getByMovieUUID(@PathVariable("movieUUID")String movieUUID){
-        var path ="/movies/{movieUUID}";
-        return ResponseEntity.ok(restTemplateClient.request(baseUrl+path, MovieDto.class, movieUUID));
+    @GetMapping("/{imdb}")
+    public ResponseEntity<MovieDto> getByImdb(@PathVariable("imdb")String imdb){
+        var path ="/movies/{imdb}";
+        return ResponseEntity.ok(restTemplateClient.request(baseUrl+path, MovieDto.class, imdb));
     }
 
     @GetMapping("/getTop10MoviesAverageEstimation")

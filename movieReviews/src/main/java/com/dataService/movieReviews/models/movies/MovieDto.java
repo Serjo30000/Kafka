@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder(toBuilder = true)
 public class MovieDto {
-    private String movieUUID;
+    private String imdb;
     private String title;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate createDate;

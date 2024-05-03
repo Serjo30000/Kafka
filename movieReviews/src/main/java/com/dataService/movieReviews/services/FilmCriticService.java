@@ -19,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -37,22 +36,24 @@ public class FilmCriticService {
         return filmCriticRepository.findByFio(fio);
     }
 
-    public FilmCritic getByFilmCriticUUID(String filmCriticUUID) {
-        return filmCriticRepository.findByFilmCriticUUID(
-                filmCriticUUID)
-                .orElseThrow(() -> new FilmCriticNotFoundException("FilmCritic not found with filmCriticUUID=" + filmCriticUUID));
+    public FilmCritic getByLogin(String login) {
+        return filmCriticRepository.findByLogin(
+                login)
+                .orElseThrow(() -> new FilmCriticNotFoundException("FilmCritic not found with login=" + login));
     }
 
     @Transactional
     public String saveFilmCritic(FilmCritic fc) {
-        UUID uuid = UUID.randomUUID();
-
-        fc.setFilmCriticUUID(uuid.toString());
-
         if (fc.getFio().getName().isEmpty() || fc.getFio().getFamily().isEmpty()
                 || fc.getFio().getPatronymic().isEmpty() 
                 || fc.getLogin().isEmpty() || fc.getDateRegistration()==null){
             return "FilmCritic not added";
+        }
+
+        for (FilmCritic elemFc : filmCriticRepository.findAll()) {
+            if (fc.getLogin().equals(elemFc.getLogin())) {
+                return "FilmCritic not added";
+            }
         }
 
         filmCriticRepository.save(fc);
