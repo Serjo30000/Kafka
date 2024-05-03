@@ -15,10 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.apiService.apiMovieReviews.clientAPI.RestTemplateClient;
+import com.apiService.apiMovieReviews.dtos.FilmCriticDto;
 import com.apiService.apiMovieReviews.dtos.MessageRes;
+import com.apiService.apiMovieReviews.dtos.MovieDto;
 import com.apiService.apiMovieReviews.dtos.ReviewDto;
 import com.apiService.apiMovieReviews.dtos.ReviewsAndDateDto;
 import com.apiService.apiMovieReviews.services.KafkaMessagePublisher;
+import com.apiService.apiMovieReviews.services.ReviewService;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class ApiServiceReviewController {
     private final KafkaMessagePublisher kafkaMessagePublisher;
     private final RestTemplateClient restTemplateClient;
+    private final ReviewService reviewService;
     
     @Value("${data-service.base-url}")
     private String baseUrl;
@@ -38,8 +42,16 @@ public class ApiServiceReviewController {
     @PostMapping("/addReview")
     public ResponseEntity<MessageRes> addReview(@RequestBody ReviewDto dto){
         try {
+            MovieDto movie = restTemplateClient.request(baseUrl + "/movies/{imdb}", MovieDto.class, dto.getImdb());
+            FilmCriticDto filmCritic = restTemplateClient.request(baseUrl+ "/filmCritics/{login}", FilmCriticDto.class, dto.getLogin());
+
+            if (!reviewService.checkReview(dto, filmCritic, movie)) {
+                return ResponseEntity.ok(new MessageRes("Not accepted"));
+            }
+
             UUID uuid = UUID.randomUUID();
             kafkaMessagePublisher.sendToReviewTopic(uuid.toString(), dto);
+
             return ResponseEntity.ok(new MessageRes("Accepted"));
         } 
         catch (InterruptedException | ExecutionException e) {

@@ -22,6 +22,7 @@ import com.apiService.apiMovieReviews.dtos.MessageRes;
 import com.apiService.apiMovieReviews.dtos.MovieAndEstimationDto;
 import com.apiService.apiMovieReviews.dtos.MovieDto;
 import com.apiService.apiMovieReviews.services.KafkaMessagePublisher;
+import com.apiService.apiMovieReviews.services.MovieService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class ApiServiceMovieController {
     private final KafkaMessagePublisher kafkaMessagePublisher;
     private final RestTemplateClient restTemplateClient;
+    private final MovieService movieService;
     
     @Value("${data-service.base-url}")
     private String baseUrl;
@@ -38,8 +40,15 @@ public class ApiServiceMovieController {
     @PostMapping("/addMovie")
     public ResponseEntity<MessageRes> addMovie(@RequestBody MovieDto dto){
         try {
+            List<MovieDto> movies = restTemplateClient.requestLst(baseUrl+"/movies", MovieDto[].class);
+
+            if (!movieService.checkMovie(dto, movies)){
+                return ResponseEntity.ok(new MessageRes("Not accepted"));
+            }
+
             UUID uuid = UUID.randomUUID();
             kafkaMessagePublisher.sendToMovieTopic(uuid.toString(), dto);
+            
             return ResponseEntity.ok(new MessageRes("Accepted"));
         } 
         catch (InterruptedException | ExecutionException e) {

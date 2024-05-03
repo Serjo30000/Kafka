@@ -19,6 +19,7 @@ import com.apiService.apiMovieReviews.dtos.FIODto;
 import com.apiService.apiMovieReviews.dtos.FilmCriticAndMoviesDto;
 import com.apiService.apiMovieReviews.dtos.FilmCriticDto;
 import com.apiService.apiMovieReviews.dtos.MessageRes;
+import com.apiService.apiMovieReviews.services.FilmCriticService;
 import com.apiService.apiMovieReviews.services.KafkaMessagePublisher;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -32,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 public class ApiServiceFilmCriticController {
     private final KafkaMessagePublisher kafkaMessagePublisher;
     private final RestTemplateClient restTemplateClient;
+    private final FilmCriticService filmCriticService;
     
     @Value("${data-service.base-url}")
     private String baseUrl;
@@ -39,8 +41,15 @@ public class ApiServiceFilmCriticController {
     @PostMapping("/addFilmCritic")
     public ResponseEntity<MessageRes> addFilmCritic(@RequestBody FilmCriticDto dto){
         try {
+            List<FilmCriticDto> filmCritics = restTemplateClient.requestLst(baseUrl + "/filmCritics",FilmCriticDto[].class);
+
+            if (!filmCriticService.checkFilmCritic(dto, filmCritics)) {
+                return ResponseEntity.ok(new MessageRes("Not accepted"));
+            }
+
             UUID uuid = UUID.randomUUID();
             kafkaMessagePublisher.sendToFilmCriticTopic(uuid.toString(), dto);
+            
             return ResponseEntity.ok(new MessageRes("Accepted"));
         } 
         catch (InterruptedException | ExecutionException e) {
