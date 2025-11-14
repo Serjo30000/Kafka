@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: data-app
+  template:
+    metadata:
+      labels:
+        app: data-app
+    spec:
+      containers:
+        - name: data-app
+          image: serv/data_service:latest
+          env:
+            - name: KAFKA_BROKER
+              value: "kafka:9092"
+            - name: DB_HOST
+              value: "db-app"
+            - name: JAVA_OPTS
+              value: "-Xmx512m"
+            - name: APPLICATIONCLASS
+              value: "com.dataService.movieReviews.MovieReviewsApplication"

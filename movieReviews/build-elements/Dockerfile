@@ -27,4 +27,4 @@ COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
 
 
-ENTRYPOINT ["/run.sh"]
+ENTRYPOINT ["java", "-cp", "app:app/lib/*", "-Dspring.profiles.active=prod", "${APPLICATIONCLASS}"]
