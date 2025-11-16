@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: data-service-config
+  namespace: cinema-app
+data:
+  DB_HOST: db-app
+  KAFKA_TOPIC_REVIEW: review-topic
+  KAFKA_TOPIC_MOVIE: movie-topic
+  KAFKA_TOPIC_FILMCRITIC: filmcritic-topic
+  KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+  SERVER_PORT: "8081"
+  KAFKA_CONSUMER_REVIEW_ID: review_id_1
+  KAFKA_CONSUMER_MOVIE_ID: movie_id_1
+  KAFKA_CONSUMER_FILMCRITIC_ID: filmcritic_id_1
