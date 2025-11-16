@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const BASE_URL = "http://localhost:8080/api/";
+const BASE_URL = "http://localhost:8082/api/";
 
 const HEADERS = { "Content-Type": "application/json; charset=utf-8", "accept": "*/*" };
 const COUNTRY = ["Russia", "USA", "Turkey", "Republic Korea", "Japan"];
