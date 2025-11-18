@@ -39,16 +39,3 @@ spec:
       - name: postgres-storage
         persistentVolumeClaim:
           claimName: postgres-pvc
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: db-app
-  namespace: cinema-app
-spec:
-  selector:
-    app: db-app
-  ports:
-    - protocol: TCP
-      port: 5432
-      targetPort: 5432
